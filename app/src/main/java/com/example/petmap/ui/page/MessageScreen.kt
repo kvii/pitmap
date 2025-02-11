@@ -2,14 +2,20 @@ package com.example.petmap.ui.page
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.petmap.data.repository.Message
 import com.example.petmap.data.viewmodels.MyViewModel
+import com.example.petmap.ui.component.MessageItem
 
 @Composable
 fun MessageScreen(myViewModel: MyViewModel = viewModel(factory = MyViewModel.Factory)) {
@@ -28,26 +34,34 @@ fun MessageScreen(myViewModel: MyViewModel = viewModel(factory = MyViewModel.Fac
 fun MessageScreenContent(
     messages: List<Message>
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text("消息", style = MaterialTheme.typography.headlineMedium)
         messages.forEach {
-            Text(text = it.content)
+            MessageItem(it)
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun MessageScreenPreview() {
-    MessageScreenContent(
-        listOf(
-            Message(
-                sendTo = "张三",
-                content = "请帮帮kvii找找走丢的狗吧。",
-            ),
-            Message(
-                sendTo = "kvii",
-                content = "您的宠物%s已走丢。",
-            ),
-        )
+    val messages = listOf(
+        Message(
+            sender = "kvii",
+            receiver = "张三",
+            content = "请帮我找找走丢的狗吧。",
+        ),
+        Message(
+            sender = "系统",
+            receiver = "kvii",
+            content = "您的宠物狗已走丢。",
+        ),
     )
+
+    MessageScreenContent(messages)
 }

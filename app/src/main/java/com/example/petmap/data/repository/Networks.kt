@@ -33,13 +33,17 @@ interface PetMapApi {
     suspend fun updatePetLocation(@Body param: UpdatePetLocation): Empty
 }
 
-class Empty;
+class Empty
 
 /** 获取用户请求 */
 data class GetUser(val userName: String, val password: String)
 
 /** 消息 */
-data class Message(val sendTo: String, val content: String);
+data class Message(
+    val sender: String,
+    val receiver: String,
+    val content: String,
+)
 
 /** 广播宠物丢失信息 */
 data class BroadcastPetLostMessage(val petName: String, val owner: String)
