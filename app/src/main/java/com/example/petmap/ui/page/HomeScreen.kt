@@ -1,6 +1,5 @@
 package com.example.petmap.ui.page
 
-import android.widget.TextView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,26 +14,34 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import com.amap.api.maps.model.CameraPosition
+import com.amap.api.maps.model.LatLng
 import com.example.petmap.R
+import com.melody.map.gd_compose.GDMap
+import com.melody.map.gd_compose.position.rememberCameraPositionState
+import com.melody.map.gd_compose.utils.MapUtils
 
 @Composable
 fun HomeScreen(
     navigateToMy: () -> Unit = {},
     navigateToMessage: () -> Unit = {},
 ) {
+    val context = LocalContext.current
+    MapUtils.setMapPrivacy(context, true)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(35.9518869, 120.1850354), 16F)
+    }
     Box(modifier = Modifier.fillMaxSize()) {
-        // TODO: 地图
-        AndroidView(
-            factory = { context ->
-                TextView(context).apply {
-                    text = context.getString(R.string.app_name)
-                }
-            }
-        )
+        GDMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            // TODO: 地图点
+        }
         Column(
             modifier = Modifier
                 .align(Alignment.TopEnd)

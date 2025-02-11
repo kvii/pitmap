@@ -1,5 +1,8 @@
 package com.example.petmap.data.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
@@ -7,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.petmap.MyApplication
 import com.example.petmap.data.repository.AppDataRepo
 import com.example.petmap.data.repository.BroadcastPetLostMessage
+import com.example.petmap.data.repository.Home
 import com.example.petmap.data.repository.Message
 import com.example.petmap.data.repository.Pet
 import com.example.petmap.data.repository.UpdatePetLocation
@@ -31,11 +35,42 @@ class MyViewModel(private val appData: AppDataRepo) : ViewModel() {
         return petMapApi.getMessages(userName)
     }
 
-    suspend fun broadcastPetLostMessage(pet: Pet) {
+    private val _fullInfo = MutableLiveData<UserFullInfo?>(null)
+
+    /** 用户信息 */
+    val fullInfo: LiveData<UserFullInfo?> get() = _fullInfo
+
+    /** 更新用户信息 */
+    suspend fun updateFullInfo() {
+        val fullInfo = userFullInfo()
+        // 随机更新宠物的位置
+        // 若宠物离家太远就广播宠物走失消息
+        val pets = fullInfo.pets.map { randomLocation(it) }
+        fullInfo.home?.let {
+            for (pet in pets) {
+                updatePetLocation(pet)
+                val m = calculateDistance(pet, it)
+                if (m >= 2000) {
+                    Log.i("MyViewModel", "${pet.petName} 触发走丢广播")
+                    broadcastPetLostMessage(pet)
+                }
+            }
+        }
+
+        _fullInfo.value = UserFullInfo(
+            user = fullInfo.user,
+            home = fullInfo.home,
+            pets = pets,
+        )
+    }
+
+    /** 广播宠物丢失信息 */
+    private suspend fun broadcastPetLostMessage(pet: Pet) {
         petMapApi.broadcastPetLostMessage(BroadcastPetLostMessage(pet.petName, pet.owner))
     }
 
-    suspend fun updatePetLocation(pet: Pet) {
+    /** 更新宠物位置 */
+    private suspend fun updatePetLocation(pet: Pet) {
         petMapApi.updatePetLocation(
             UpdatePetLocation(
                 pet.petName,
@@ -44,6 +79,19 @@ class MyViewModel(private val appData: AppDataRepo) : ViewModel() {
                 pet.latitude
             )
         )
+    }
+
+    /** 随机化宠物的位置 */
+    private fun randomLocation(pet: Pet) = Pet(
+        petName = pet.petName,
+        owner = pet.owner,
+        longitude = pet.longitude + (-4..4).random() / 100,
+        latitude = pet.longitude + (-4..4).random() / 100,
+    )
+
+    /** 计算宠物和家的距离 */
+    private fun calculateDistance(pet: Pet, home: Home): Double {
+        return 0.0
     }
 
     companion object {

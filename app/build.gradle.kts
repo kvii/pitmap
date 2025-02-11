@@ -28,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "19"
     }
     buildFeatures {
         compose = true
@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,4 +61,6 @@ dependencies {
     implementation(libs.retrofit)
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation(libs.converter.gson)
+    // https://mvnrepository.com/artifact/io.github.TheMelody/gd_compose
+    implementation(libs.gd.compose)
 }
