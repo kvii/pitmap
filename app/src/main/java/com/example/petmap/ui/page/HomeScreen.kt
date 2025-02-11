@@ -22,6 +22,9 @@ import com.amap.api.maps.model.CameraPosition
 import com.amap.api.maps.model.LatLng
 import com.example.petmap.R
 import com.melody.map.gd_compose.GDMap
+import com.melody.map.gd_compose.overlay.MarkerInfoWindowContent
+import com.melody.map.gd_compose.overlay.MarkerState
+import com.melody.map.gd_compose.poperties.MapUiSettings
 import com.melody.map.gd_compose.position.rememberCameraPositionState
 import com.melody.map.gd_compose.utils.MapUtils
 
@@ -30,17 +33,30 @@ fun HomeScreen(
     navigateToMy: () -> Unit = {},
     navigateToMessage: () -> Unit = {},
 ) {
-    val context = LocalContext.current
-    MapUtils.setMapPrivacy(context, true)
+    MapUtils.setMapPrivacy(LocalContext.current, true)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(35.9518869, 120.1850354), 16F)
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
         GDMap(
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
+            cameraPositionState = cameraPositionState,
+            uiSettings = MapUiSettings(
+                isZoomGesturesEnabled = true,
+                isScrollGesturesEnabled = true,
+            ),
         ) {
-            // TODO: 地图点
+            MarkerInfoWindowContent(
+                title = "家",
+                state = MarkerState(LatLng(35.9518869, 120.1850354)),
+                onClick = { it.showInfoWindow(); true },
+            )
+            MarkerInfoWindowContent(
+                title = "狗",
+                state = MarkerState(LatLng(35.9518869 + 0.004, 120.1850354 + 0.004)),
+                onClick = { it.showInfoWindow(); true },
+            )
         }
         Column(
             modifier = Modifier

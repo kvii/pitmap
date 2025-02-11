@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.amap.api.maps.AMapUtils
+import com.amap.api.maps.model.LatLng
 import com.example.petmap.MyApplication
 import com.example.petmap.data.repository.AppDataRepo
 import com.example.petmap.data.repository.BroadcastPetLostMessage
@@ -50,7 +52,7 @@ class MyViewModel(private val appData: AppDataRepo) : ViewModel() {
             for (pet in pets) {
                 updatePetLocation(pet)
                 val m = calculateDistance(pet, it)
-                if (m >= 2000) {
+                if (m >= 600) {
                     Log.i("MyViewModel", "${pet.petName} 触发走丢广播")
                     broadcastPetLostMessage(pet)
                 }
@@ -85,13 +87,15 @@ class MyViewModel(private val appData: AppDataRepo) : ViewModel() {
     private fun randomLocation(pet: Pet) = Pet(
         petName = pet.petName,
         owner = pet.owner,
-        longitude = pet.longitude + (-4..4).random() / 100,
-        latitude = pet.longitude + (-4..4).random() / 100,
+        longitude = pet.longitude + (-8..8).random() / 1000, // 0.004 约为 560m
+        latitude = pet.longitude + (-8..8).random() / 1000,
     )
 
     /** 计算宠物和家的距离 */
-    private fun calculateDistance(pet: Pet, home: Home): Double {
-        return 0.0
+    private fun calculateDistance(pet: Pet, home: Home): Float {
+        val latLng1 = LatLng(pet.latitude, pet.longitude)
+        val latLng2 = LatLng(home.latitude, home.longitude)
+        return AMapUtils.calculateLineDistance(latLng1, latLng2)
     }
 
     companion object {
