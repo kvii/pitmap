@@ -14,7 +14,7 @@ val retrofit: Retrofit = Retrofit.Builder().run {
     build()
 }
 
-val petMapApi = retrofit.create(PetMapApi::class.java)
+val petMapApi: PetMapApi = retrofit.create(PetMapApi::class.java)
 
 interface PetMapApi {
     @POST("api/v1/login")
