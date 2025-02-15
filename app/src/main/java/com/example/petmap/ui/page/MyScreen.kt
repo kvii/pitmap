@@ -16,9 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.petmap.R
-import com.example.petmap.data.repository.Home
-import com.example.petmap.data.repository.Pet
-import com.example.petmap.data.repository.User
+import com.example.petmap.data.repository.MockPetMapApi
 import com.example.petmap.data.repository.UserFullInfo
 import com.example.petmap.data.viewmodels.MyViewModel
 import com.example.petmap.ui.component.NameAvatar
@@ -69,24 +67,5 @@ fun MyScreenContent(info: UserFullInfo) {
 @Composable
 fun MyScreenPreview() {
     // 为减少 api 数量，接口多了点冗余数据
-    val info = UserFullInfo(
-        user = User(
-            userName = "kvii",
-            password = "pass"
-        ),
-        home = Home(
-            owner = "kvii",
-            longitude = 1.0,
-            latitude = 1.0,
-        ),
-        pets = listOf(
-            Pet(
-                petName = "狗",
-                owner = "kvii",
-                longitude = 1.0,
-                latitude = 1.0,
-            )
-        )
-    )
-    MyScreenContent(info)
+    MyScreenContent(MockPetMapApi.userFullInfo)
 }

@@ -63,4 +63,5 @@ dependencies {
     implementation(libs.converter.gson)
     // https://mvnrepository.com/artifact/io.github.TheMelody/gd_compose
     implementation(libs.gd.compose)
+    implementation(libs.androidx.runtime.livedata)
 }

@@ -13,11 +13,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.petmap.R
 import com.example.petmap.data.viewmodels.UserViewModel
+import com.melody.map.gd_compose.utils.MapUtils
 import kotlinx.coroutines.launch
 
 const val TAG = "LoginScreen"
@@ -35,6 +38,10 @@ fun LoginScreen(
     snackBarHostState: SnackbarHostState,
     navigateToHome: () -> Unit = {},
 ) {
+    // demo 工程 直接同意隐私权限
+    val ctx = LocalContext.current
+    LaunchedEffect(Unit) { MapUtils.setMapPrivacy(ctx, true) }
+
     LoginScreenContent(
         initialUsername = userViewModel.loadUserName() ?: "",
         snackBarHostState = snackBarHostState,

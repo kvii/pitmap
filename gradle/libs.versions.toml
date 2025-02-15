@@ -12,9 +12,11 @@ activityCompose = "1.10.0"
 composeBom = "2024.04.01"
 navigationComposeVersion = "2.8.6"
 retrofit = "2.11.0"
+runtimeLivedata = "1.7.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtimeLivedata" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 gd_compose = { module = "io.github.TheMelody:gd_compose", version.ref = "gd_compose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

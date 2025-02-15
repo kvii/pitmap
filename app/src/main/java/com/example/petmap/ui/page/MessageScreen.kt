@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.petmap.data.repository.Message
+import com.example.petmap.data.repository.MockPetMapApi
 import com.example.petmap.data.viewmodels.MyViewModel
 import com.example.petmap.ui.component.MessageItem
 
@@ -50,18 +51,5 @@ fun MessageScreenContent(
 @Preview(showBackground = true)
 @Composable
 fun MessageScreenPreview() {
-    val messages = listOf(
-        Message(
-            sender = "kvii",
-            receiver = "张三",
-            content = "请帮我找找走丢的狗吧。",
-        ),
-        Message(
-            sender = "系统",
-            receiver = "kvii",
-            content = "您的宠物狗已走丢。",
-        ),
-    )
-
-    MessageScreenContent(messages)
+    MessageScreenContent(MockPetMapApi.messages)
 }

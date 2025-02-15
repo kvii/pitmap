@@ -1,5 +1,6 @@
 package com.example.petmap.data.repository
 
+import com.amap.api.maps.model.LatLng
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -9,12 +10,18 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 val retrofit: Retrofit = Retrofit.Builder().run {
-    baseUrl("http://118.190.210.87")
+    baseUrl("http://118.190.206.10")
     addConverterFactory(GsonConverterFactory.create())
     build()
 }
 
-val petMapApi: PetMapApi = retrofit.create(PetMapApi::class.java)
+const val isProduction = true
+
+val petMapApi: PetMapApi = if (isProduction) {
+    retrofit.create(PetMapApi::class.java)
+} else {
+    MockPetMapApi
+}
 
 interface PetMapApi {
     @POST("api/v1/login")
@@ -31,6 +38,53 @@ interface PetMapApi {
 
     @PUT("api/v1/pet/location")
     suspend fun updatePetLocation(@Body param: UpdatePetLocation): Empty
+}
+
+object MockPetMapApi : PetMapApi {
+    override suspend fun login(getUser: GetUser) = Empty()
+
+    override suspend fun getMessages(userName: String) = messages
+
+    override suspend fun broadcastPetLostMessage(msg: BroadcastPetLostMessage) = Empty()
+
+    override suspend fun getUserFullInfo(userName: String) = userFullInfo
+
+    override suspend fun updatePetLocation(param: UpdatePetLocation) = Empty()
+
+    val userFullInfo: UserFullInfo
+        get() = UserFullInfo(
+            user = User(
+                userName = "kvii",
+                password = "123",
+            ),
+            home = Home(
+                owner = "kvii",
+                latitude = 35.9518869,
+                longitude = 120.1850354,
+            ),
+            pets = listOf(
+                Pet(
+                    petName = "狗",
+                    owner = "kvii",
+                    latitude = 35.9518869 + 0.001, // 防标记重合
+                    longitude = 120.1850354 + 0.001,
+                )
+            )
+        )
+
+    val messages: List<Message>
+        get() = listOf(
+            Message(
+                sender = "kvii",
+                receiver = "张三",
+                content = "请帮我找找走丢的狗吧。",
+            ),
+            Message(
+                sender = "系统",
+                receiver = "kvii",
+                content = "您的宠物狗已走丢。",
+            ),
+        )
 }
 
 class Empty
@@ -57,26 +111,30 @@ data class UserFullInfo(
 
 data class User(val userName: String, val password: String)
 
-data class Home(val owner: String, val longitude: Double, val latitude: Double)
+data class Home(val owner: String, val latitude: Double, val longitude: Double) {
+    val latLang: LatLng get() = LatLng(latitude, longitude)
+}
 
 data class Pet(
     /** 宠物名 */
     val petName: String,
     /** 主人名 */
     val owner: String,
-    /** 经度 */
-    val longitude: Double,
     /** 纬度 */
     val latitude: Double,
-)
+    /** 经度 */
+    val longitude: Double,
+) {
+    val latLang: LatLng get() = LatLng(latitude, longitude)
+}
 
 data class UpdatePetLocation(
     /** 宠物名 */
     val petName: String,
     /** 主人名 */
     val owner: String,
-    /** 经度 */
-    val longitude: Double,
     /** 纬度 */
     val latitude: Double,
+    /** 经度 */
+    val longitude: Double,
 )
