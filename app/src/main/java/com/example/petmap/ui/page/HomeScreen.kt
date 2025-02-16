@@ -85,7 +85,7 @@ fun HomeScreenContent(
             }
             fullInfo?.pets?.forEach { pet ->
                 MarkerInfoWindowContent(
-                    title = "狗",
+                    title = pet.petName,
                     state = MarkerState(pet.latLang),
                     onClick = { it.showInfoWindow(); true },
                 )
