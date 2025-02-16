@@ -64,7 +64,7 @@ object MockPetMapApi : PetMapApi {
             ),
             pets = listOf(
                 Pet(
-                    petName = "狗",
+                    petName = "猫",
                     owner = "kvii",
                     latitude = 35.9518869 + 0.001, // 防标记重合
                     longitude = 120.1850354 + 0.001,
@@ -77,12 +77,12 @@ object MockPetMapApi : PetMapApi {
             Message(
                 sender = "kvii",
                 receiver = "张三",
-                content = "请帮我找找走丢的狗吧。",
+                content = "请帮我找找走丢的猫吧。",
             ),
             Message(
                 sender = "系统",
                 receiver = "kvii",
-                content = "您的宠物狗已走丢。",
+                content = "您的宠物猫已走丢。",
             ),
         )
 }

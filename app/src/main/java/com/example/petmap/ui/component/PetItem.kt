@@ -25,7 +25,7 @@ fun PetItem(pet: Pet) {
 @Composable
 fun PetItemPreview() {
     val pet = Pet(
-        petName = "狗",
+        petName = "猫",
         owner = "kvii",
         longitude = 1.0,
         latitude = 1.0,

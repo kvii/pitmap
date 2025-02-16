@@ -27,7 +27,7 @@ fun MessageItemPreview() {
         Message(
             sender = "kvii",
             receiver = "张三",
-            content = "请帮我找找走丢的狗吧。",
+            content = "请帮我找找走丢的猫吧。",
         )
     )
 }
