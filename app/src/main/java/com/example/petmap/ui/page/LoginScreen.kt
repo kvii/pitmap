@@ -114,7 +114,7 @@ fun LoginScreenContent(
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     LoginScreenContent(

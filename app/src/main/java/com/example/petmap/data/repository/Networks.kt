@@ -10,7 +10,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 val retrofit: Retrofit = Retrofit.Builder().run {
-    baseUrl("http://118.190.206.10")
+    baseUrl("http://118.190.204.210")
     addConverterFactory(GsonConverterFactory.create())
     build()
 }
